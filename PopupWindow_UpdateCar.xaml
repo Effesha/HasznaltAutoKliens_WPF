@@ -1,0 +1,193 @@
+﻿<Window x:Class="HasznaltAutoKliens.PopupWindow_UpdateCar"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HasznaltAutoKliens"
+        mc:Ignorable="d"
+        Title="Add new car" Height="400" Width="250"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize">
+    <Grid>
+        <Grid
+        x:Name="CarDetailsGrid">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
+                <ColumnDefinition Width="3*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <TextBlock 
+            Grid.Column="0"
+            Grid.Row="0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            FontWeight="Bold"
+            Text="Make"/>
+            <TextBlock 
+            Grid.Column="0"
+            Grid.Row="1"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            FontWeight="Bold"
+            Text="Model"/>
+            <TextBlock 
+            Grid.Column="0"
+            Grid.Row="2"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            FontWeight="Bold"
+            Text="License plate"/>
+            <TextBlock 
+            Grid.Column="0"
+            Grid.Row="3"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            FontWeight="Bold"
+            Text="Price"/>
+            <TextBlock 
+            Grid.Column="0"
+            Grid.Row="4"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            FontWeight="Bold"
+            Text="Registration"/>
+            <TextBlock 
+            Grid.Column="0"
+            Grid.Row="5"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            FontWeight="Bold"
+            Text="Kilometres"/>
+            <TextBlock 
+            Grid.Column="0"
+            Grid.Row="6"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            FontWeight="Bold"
+            Text="Fuel type"/>
+            <TextBlock 
+            Grid.Column="0"
+            Grid.Row="7"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            FontWeight="Bold"
+            Text="Owned by"/>
+            <TextBlock 
+            Grid.Column="0"
+            Grid.Row="8"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center"
+            FontWeight="Bold"
+            Text="Owners"/>
+            <TextBox 
+                Grid.Column="1"
+                Grid.Row="0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Height="30"
+                Width="115"
+                Text="{Binding Make}"
+                IsReadOnly="True"/>
+            <TextBox 
+                Grid.Column="1"
+                Grid.Row="1"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Height="30"
+                Width="115"
+                Text="{Binding Model}"
+                IsReadOnly="True"/>
+            <TextBox 
+                Grid.Column="1"
+                Grid.Row="2"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Height="30"
+                Width="115"
+                Text="{Binding LicensePlate}"
+                ToolTip="Format: 'ABC-123'"/>
+            <TextBox 
+                Grid.Column="1"
+                Grid.Row="3"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Height="30"
+                Width="115"
+                Text="{Binding Price}"/>
+            <TextBox 
+                Grid.Column="1"
+                Grid.Row="4"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Height="30"
+                Width="115"
+                Text="{Binding Registration}"
+                ToolTip="Format: 'yyyy/MM' or 'yyyy/M'"
+                IsReadOnly="True"/>
+            <TextBox 
+                Grid.Column="1"
+                Grid.Row="5"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Height="30"
+                Width="115"
+                Text="{Binding Kilometres}"
+                ToolTip="(in kilometres)"/>
+            <TextBox 
+                Grid.Column="1"
+                Grid.Row="6"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Height="30"
+                Width="115"
+                Text="{Binding FuelType}"
+                ToolTip="Accepted values: 'Gasoline', 'Diesel'"/>
+            <TextBox 
+                Grid.Column="1"
+                Grid.Row="7"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Height="30"
+                Width="115"
+                Text="{Binding CurrentOwner}"
+                ToolTip="ID of owner - numeric, > 0"/>
+            <TextBox 
+                Grid.Column="1"
+                Grid.Row="8"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                Height="30"
+                Width="115"
+                Text="{Binding PreviousOwners}"
+                ToolTip="Number of previous owners - numeric"/>
+            <Button 
+                x:Name="updateButton"
+                Grid.ColumnSpan="2"
+                Grid.Row="9"
+                Content="Update" 
+                Height="30"
+                Width="90"
+                FontSize="18"/>
+            <Label
+                Grid.ColumnSpan="2"
+                Grid.Row="10"
+                x:Name="resultMessage"
+                HorizontalAlignment="Center"
+                FontSize="12"
+                Foreground="Gray">
+            </Label>
+        </Grid>
+    </Grid>
+</Window>

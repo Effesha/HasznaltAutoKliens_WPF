@@ -1,0 +1,95 @@
+syntax = "proto3";
+
+option csharp_namespace = "HasznaltAuto";
+
+service HasznaltAuto {
+	rpc Register(RegistrationRequest) returns (ResultResponse) {}
+	rpc Login(LoginRequest) returns (LoginResponse) {}
+	rpc Logout(LogoutRequest) returns (ResultResponse) {}
+	rpc ListCars(Empty) returns (stream Car) {}
+	rpc ListCarsFiltered(ListCarsFilteredRequest) returns (stream Car) {} 
+	rpc GetCar(GetCarRequest) returns (Car) {}
+	rpc CreateCar(CreateCarRequest) returns (ResultResponse) {}
+	rpc UpdateCar(UpdateCarRequest) returns (ResultResponse) {}
+	rpc DeleteCar(DeleteCarRequest) returns (ResultResponse) {}
+	rpc BuyCar(BuyCarRequest) returns (ResultResponse) {}
+}
+
+message Empty {}
+
+message ResultResponse {
+	bool success = 1;
+	string message = 2;
+}
+
+message RegistrationRequest {
+	string name = 1;
+	string password = 2;
+}
+
+message LoginRequest {
+	string name = 1;
+	string password = 2;
+}
+
+message LoginResponse {
+	string session_id = 1;
+	int32 current_user = 2;
+	string message = 3;
+}
+
+message LogoutRequest {
+	string session_id = 1;
+}
+
+message ListCarsFilteredRequest {
+	string session_id = 1;
+	string fuel_type = 2;
+	int32 current_user = 3;
+}
+
+message GetCarRequest {
+	int32 car_id = 1;
+}
+
+message CreateCarRequest {
+	string session_id = 1;
+	Car car = 2;
+}
+
+message UpdateCarRequest {
+	string session_id = 1;
+	Car car = 2;
+}
+
+message DeleteCarRequest {
+	string session_id = 1;
+	int32 car_id = 2;
+	int32 current_user = 3;
+}
+
+message BuyCarRequest {
+	string session_id = 1;
+	int32 car_id = 2;
+	int32 current_user = 3;
+}
+
+message Car {
+	int32 id = 1;
+	string make = 2;
+	string model = 3;
+	int32 price = 4;
+	string registration = 5;
+	string license_plate = 6;
+	int32 kilometres = 7;
+	FuelType fuel_type = 8;
+	int32 current_owner = 9;
+	int32 previous_owners = 10;
+	bool is_deleted = 11;
+}
+
+enum FuelType {
+	FUELTYPE_UNSPECIFIED = 0;
+	FUELTYPE_GASOLINE = 1;
+	FUELTYPE_DIESEL = 2;
+}
