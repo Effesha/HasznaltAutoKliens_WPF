@@ -49,7 +49,21 @@ namespace HasznaltAutoKliens
                 return;
             }
 
-
+            var response = await _hasznaltAutoClient.LogoutAsync(new LogoutRequest { SessionId = _sessionId });
+            if (response.Success)
+            {
+                Success(response.Message);
+                _sessionId = string.Empty;
+                _currentUser = 0;
+                LoginWindow lw = new();
+                Close();
+                lw.Show();
+            }
+            else
+            {
+                Error(response.Message);
+                return;
+            }
         }
 
         public static async Task ReloadList()
@@ -135,23 +149,30 @@ namespace HasznaltAutoKliens
                 return;
             }
 
-            var response = await _hasznaltAutoClient.DeleteCarAsync(new DeleteCarRequest
-            {
-                CarId = selectedCar.Id,
-                CurrentUser = _currentUser,
-                SessionId = _sessionId
-            });
+            MessageBoxResult deletePromptResult = MessageBox.Show("Are you sure you want to delete this car?", $"Deleting {selectedCar.LicensePlate}", MessageBoxButton.YesNoCancel);
 
-            if (response.Success)
+            if (deletePromptResult == MessageBoxResult.Yes)
             {
-                Success(response.Message);
-                return;
+                var response = await _hasznaltAutoClient.DeleteCarAsync(new DeleteCarRequest
+                {
+                    CarId = selectedCar.Id,
+                    CurrentUser = _currentUser,
+                    SessionId = _sessionId
+                });
+
+                if (response.Success)
+                {
+                    Success(response.Message);
+                    return;
+                }
+                else
+                {
+                    Error(response.Message);
+                    return;
+                }
             }
-            else
-            {
-                Error(response.Message);
-                return;
-            }
+
+            Error("Delete process was canceled by the user.");
         }
 
         public async void Buy(object sender, RoutedEventArgs e)

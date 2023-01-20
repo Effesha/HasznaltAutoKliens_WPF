@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HasznaltAutoKliens"
         mc:Ignorable="d"
-        Title="Add new car" Height="400" Width="250"
+        Title="Update existing car" Height="400" Width="250"
         WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize">
     <Grid>
