@@ -2,22 +2,23 @@
 
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
-		<TargetFramework>net6.0-windows</TargetFramework>
+		<TargetFramework>net8.0-windows7.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<UseWPF>true</UseWPF>
 		<CoreCompileDependsOn>$(CoreCompileDependsOn);Protobuf_Compile</CoreCompileDependsOn>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Google.Protobuf" Version="3.21.12" />
-		<PackageReference Include="Grpc.Net.Client" Version="2.50.0" />
-		<PackageReference Include="Grpc.Tools" Version="2.51.0">
+		<PackageReference Include="Google.Protobuf" Version="3.33.0" />
+		<PackageReference Include="Grpc.Net.Client" Version="2.71.0" />
+		<PackageReference Include="Grpc.Tools" Version="2.76.0">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 	</ItemGroup>
 
 	<ItemGroup>
-		<Protobuf Include="Protos\hasznaltauto.proto" GrpcServices="Client"></Protobuf>
+	  <ProjectReference Include="..\HasznaltAuto.API\HasznaltAuto.API.csproj" />
+	  <ProjectReference Include="..\HasznaltAuto.Protos\HasznaltAuto.Protos.csproj" />
 	</ItemGroup>
 </Project>

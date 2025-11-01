@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using HasznaltAuto.Desktop.Singletons;
 using System.Windows;
 
 namespace HasznaltAutoKliens
@@ -13,5 +8,12 @@ namespace HasznaltAutoKliens
     /// </summary>
     public partial class App : Application
     {
+        public static GrpcServiceProvider GrpcService { get; private set; }
+
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            GrpcService = GrpcServiceProvider.Instance;
+            base.OnStartup(e);
+        }
     }
 }

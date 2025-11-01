@@ -1,17 +1,5 @@
-﻿using HasznaltAuto;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using HasznaltAuto.API.DTOs;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace HasznaltAutoKliens
 {
@@ -20,14 +8,14 @@ namespace HasznaltAutoKliens
     /// </summary>
     public partial class PopupWindow_GetCar : Window
     {
-        Car Car;
+        private readonly CarDto _car;
 
-        public PopupWindow_GetCar(Car car)
+        public PopupWindow_GetCar(CarDto car)
         {
             InitializeComponent();
-            Car = car;
-            Title += " - " + Car.LicensePlate;
-            DataContext = Car;
+            _car = car;
+            Title += " - " + car.VehicleRegistrationDto.LicensePlate;
+            DataContext = car;
         }
     }
 }

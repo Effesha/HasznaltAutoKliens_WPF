@@ -14,7 +14,7 @@
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <DataGrid
-            ItemsSource="{Binding CarList}"
+            ItemsSource="{Binding CarDtos}"
             AutoGenerateColumns="False"
             x:Name="CarsGrid"
             IsReadOnly="True"
@@ -23,11 +23,11 @@
             Margin="0 5"
             Width="480">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Make" Binding="{Binding Make}" Width="70"></DataGridTextColumn>
-                    <DataGridTextColumn Header="Model" Binding="{Binding Model}" Width="100"></DataGridTextColumn>
-                    <DataGridTextColumn Header="License plate" Binding="{Binding LicensePlate}" Width="80"></DataGridTextColumn>
-                    <DataGridTextColumn Header="Registration date" Binding="{Binding Registration}" Width="100"></DataGridTextColumn>
-                    <DataGridTextColumn Header="Fuel type" Binding="{Binding FuelType}" Width="60"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Make" Binding="{Binding MakeName}" Width="70"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Model" Binding="{Binding ModelName}" Width="100"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Mileage" Binding="{Binding Mileage}" Width="80"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Production date" Binding="{Binding ProductionDate}" Width="100"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Fuel type" Binding="{Binding FuelTypeName}" Width="60"></DataGridTextColumn>
                 </DataGrid.Columns>
                 <DataGrid.Resources>
                     <Style TargetType="DataGridRow">
@@ -42,6 +42,15 @@
             Width="80"
             FontSize="18"
             Margin="5"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"/>
+        <Button 
+            x:Name="refreshButton" 
+            Content="Refresh" 
+            Height="30"
+            Width="80"
+            FontSize="18"
+            Margin="0,40,5,0"
             HorizontalAlignment="Right"
             VerticalAlignment="Top"/>
         <StackPanel

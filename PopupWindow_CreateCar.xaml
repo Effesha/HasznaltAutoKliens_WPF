@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HasznaltAutoKliens"
         mc:Ignorable="d"
-        Title="Add new car" Height="400" Width="250"
+        Title="Add new car" Height="500" Width="250"
         WindowStartupLocation="CenterOwner"
         ResizeMode="NoResize">
     <Grid>
@@ -25,88 +25,79 @@
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
             <TextBlock 
-            Grid.Column="0"
-            Grid.Row="0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Center"
-            FontWeight="Bold"
-            Text="Make"/>
+                Grid.Column="0"
+                Grid.Row="0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                FontWeight="Bold"
+                Text="Make"/>
             <TextBlock 
-            Grid.Column="0"
-            Grid.Row="1"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Center"
-            FontWeight="Bold"
-            Text="Model"/>
+                Grid.Column="0"
+                Grid.Row="1"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                FontWeight="Bold"
+                Text="Model"/>
             <TextBlock 
-            Grid.Column="0"
-            Grid.Row="2"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Center"
-            FontWeight="Bold"
-            Text="License plate"/>
+                Grid.Column="0"
+                Grid.Row="2"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                FontWeight="Bold"
+                Text="Production date"/>
             <TextBlock 
-            Grid.Column="0"
-            Grid.Row="3"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Center"
-            FontWeight="Bold"
-            Text="Price"/>
+                Grid.Column="0"
+                Grid.Row="3"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                FontWeight="Bold"
+                Text="Mileage"/>
             <TextBlock 
-            Grid.Column="0"
-            Grid.Row="4"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Center"
-            FontWeight="Bold"
-            Text="Registration"/>
+                Grid.Column="0"
+                Grid.Row="4"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                FontWeight="Bold"
+                Text="License plate"/>
             <TextBlock 
-            Grid.Column="0"
-            Grid.Row="5"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Center"
-            FontWeight="Bold"
-            Text="Kilometres"/>
+                Grid.Column="0"
+                Grid.Row="5"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                FontWeight="Bold"
+                Text="Fuel type"/>
             <TextBlock 
-            Grid.Column="0"
-            Grid.Row="6"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Center"
-            FontWeight="Bold"
-            Text="Fuel type"/>
-            <TextBlock 
-            Grid.Column="0"
-            Grid.Row="7"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Center"
-            FontWeight="Bold"
-            Text="Owned by"/>
-            <TextBlock 
-            Grid.Column="0"
-            Grid.Row="8"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Center"
-            FontWeight="Bold"
-            Text="Owners"/>
-            <TextBox 
+                Grid.Column="0"
+                Grid.Row="6"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                FontWeight="Bold"
+                Text="Price"/>
+
+            <ComboBox 
                 Grid.Column="1"
                 Grid.Row="0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
                 Height="30"
                 Width="115"
-                Text="{Binding Make}"/>
-            <TextBox 
+                ItemsSource="{Binding Makes}"
+                DisplayMemberPath="Name"
+                SelectedValuePath="Id"
+                SelectedValue="{Binding CarDto.MakeId, Mode=TwoWay}"/>            
+            <ComboBox 
                 Grid.Column="1"
                 Grid.Row="1"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
                 Height="30"
                 Width="115"
-                Text="{Binding Model}"/>
+                ItemsSource="{Binding Models}"
+                DisplayMemberPath="Name"
+                SelectedValuePath="Id"
+                SelectedValue="{Binding CarDto.ModelId, Mode=TwoWay}"/>
             <TextBox 
                 Grid.Column="1"
                 Grid.Row="2"
@@ -114,8 +105,8 @@
                 VerticalAlignment="Center"
                 Height="30"
                 Width="115"
-                Text="{Binding LicensePlate}"
-                ToolTip="Format: 'ABC-123'"/>
+                Text="{Binding CarDto.ProductionDate}"
+                ToolTip="Format: 'yyyy/MM' or 'yyyy/M'" />
             <TextBox 
                 Grid.Column="1"
                 Grid.Row="3"
@@ -123,7 +114,7 @@
                 VerticalAlignment="Center"
                 Height="30"
                 Width="115"
-                Text="{Binding Price}"/>
+                Text="{Binding CarDto.Mileage}"/>
             <TextBox 
                 Grid.Column="1"
                 Grid.Row="4"
@@ -131,17 +122,19 @@
                 VerticalAlignment="Center"
                 Height="30"
                 Width="115"
-                Text="{Binding Registration}"
-                ToolTip="Format: 'yyyy/MM' or 'yyyy/M'"/>
-            <TextBox 
+                Text="{Binding CarDto.VehicleRegistrationDto.LicensePlate}"
+                ToolTip="Format: 'ABC-123'"/>
+            <ComboBox 
                 Grid.Column="1"
                 Grid.Row="5"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Center"
                 Height="30"
                 Width="115"
-                Text="{Binding Kilometres}"
-                ToolTip="(in kilometres)"/>
+                ItemsSource="{Binding FuelTypes}"
+                DisplayMemberPath="Name"
+                SelectedValuePath="Id"
+                SelectedValue="{Binding CarDto.FuelTypeId, Mode=TwoWay}"/>
             <TextBox 
                 Grid.Column="1"
                 Grid.Row="6"
@@ -149,37 +142,19 @@
                 VerticalAlignment="Center"
                 Height="30"
                 Width="115"
-                Text="{Binding FuelType}"
-                ToolTip="Accepted values: 'Gasoline', 'Diesel'"/>
-            <TextBox 
-                Grid.Column="1"
-                Grid.Row="7"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Center"
-                Height="30"
-                Width="115"
-                Text="{Binding CurrentOwner}"
-                ToolTip="ID of owner - numeric, > 0"/>
-            <TextBox 
-                Grid.Column="1"
-                Grid.Row="8"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Center"
-                Height="30"
-                Width="115"
-                Text="{Binding PreviousOwners}"
-                ToolTip="Number of previous owners - numeric"/>
+                Text="{Binding CarDto.Price}"
+                ToolTip="In HUF"/>
             <Button 
                 x:Name="createButton"
                 Grid.ColumnSpan="2"
-                Grid.Row="9"
+                Grid.Row="7"
                 Content="Create" 
                 Height="30"
                 Width="90"
                 FontSize="18"/>
             <Label
                 Grid.ColumnSpan="2"
-                Grid.Row="10"
+                Grid.Row="8"
                 x:Name="resultMessage"
                 HorizontalAlignment="Center"
                 FontSize="12"

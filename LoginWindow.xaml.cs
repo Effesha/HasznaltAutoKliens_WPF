@@ -1,113 +1,125 @@
-﻿using Grpc.Net.Client;
-using HasznaltAuto;
+﻿using Azure;
+using HasznaltAuto.API;
 using System;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
-using static HasznaltAuto.HasznaltAuto;
+using static HasznaltAuto.API.UserGrpc;
 
-namespace HasznaltAutoKliens
+namespace HasznaltAutoKliens;
+
+/// <summary>
+/// Interaction logic for LoginWindow.xaml
+/// </summary>
+public partial class LoginWindow : Window
 {
-    /// <summary>
-    /// Interaction logic for LoginWindow.xaml
-    /// </summary>
-    public partial class LoginWindow : Window
+    private readonly UserGrpcClient _userGrpClient;
+
+    public LoginWindow()
     {
-        GrpcChannel _grpcChannel = GrpcChannel.ForAddress("https://localhost:32767");
-        HasznaltAutoClient _hasznaltAutoClient;
+        InitializeComponent();
 
-        public LoginWindow()
+        _userGrpClient = App.GrpcService.UserGrpcClient;
+
+        loginButton.Click += new RoutedEventHandler(Login);
+        registerButton.Click += new RoutedEventHandler(Register);
+    }
+
+    public async void Login(object sender, RoutedEventArgs e)
+    {
+        //resultMessage.Content += "Debug mode, logging in...";
+        //await Task.Delay(1000);
+        //MainWindow mwDebug = new("1", 1);
+        //Close();
+        //mwDebug.Show();
+
+        if (string.IsNullOrWhiteSpace(usernameTextbox.Text) || string.IsNullOrWhiteSpace(passwordBox.Password))
         {
-            InitializeComponent();
-            _hasznaltAutoClient = new HasznaltAutoClient(_grpcChannel);
-            loginButton.Click += new RoutedEventHandler(Login);
-            registerButton.Click += new RoutedEventHandler(Register);
+            Error("Please enter a username and a password.");
+            return;
         }
 
-        public async void Login(object sender, RoutedEventArgs e)
+        try
         {
-            if (string.IsNullOrWhiteSpace(usernameTextbox.Text) || string.IsNullOrWhiteSpace(passwordBox.Password))
+            resultMessage.Content = "Trying to log you in...";
+            var response = await _userGrpClient.LoginAsync(new LoginRequest
             {
-                Error("Please enter a username and a password.");
-                return;
-            }
-
-            try
-            {
-                resultMessage.Content = "Trying to log you in...";
-                var response = await _hasznaltAutoClient.LoginAsync(new LoginRequest
+                User = new UserType
                 {
                     Name = usernameTextbox.Text,
                     Password = passwordBox.Password
-                });
+                }
+            }, null);
 
-                if (string.IsNullOrWhiteSpace(response.SessionId))
-                {
-                    Error(response.Message);
-                    return;
-                }
-                else
-                {
-                    Success(response.Message);
-                    resultMessage.Content += " Redirecting...";
-                    await Task.Delay(3000);
-                    MainWindow mw = new(_hasznaltAutoClient, response.SessionId, response.CurrentUser);
-                    Close();
-                    mw.Show();
-                }
-            }
-            catch (Exception ex)
+            if (string.IsNullOrWhiteSpace(response.SessionId))
             {
-                Error("Server unavailable.");
+                Error(response.Message);
                 return;
+            }
+            else
+            {
+                Success(response.Message);
+                resultMessage.Content += " Redirecting...";
+                await Task.Delay(1500); // TODO AB consider removing
+                MainWindow mw = new(response.SessionId, response.CurrentUser);
+                Close();
+                mw.Show();
             }
         }
-
-        public async void Register(object sender, RoutedEventArgs e)
+        catch (Exception ex)
         {
-            if (string.IsNullOrWhiteSpace(usernameTextbox.Text) || string.IsNullOrWhiteSpace(passwordBox.Password))
-            {
-                Error("Please enter a username and a password.");
-                return;
-            }
+            Error("Server unavailable.");
+            return;
+        }
+    }
 
-            try
+    public async void Register(object sender, RoutedEventArgs e)
+    {
+        if (string.IsNullOrWhiteSpace(usernameTextbox.Text) || string.IsNullOrWhiteSpace(passwordBox.Password))
+        {
+            Error("Please enter a username and a password.");
+            return;
+        }
+
+        try
+        {
+            var response = await _userGrpClient.RegisterAsync(new RegistrationRequest
             {
-                var response = await _hasznaltAutoClient.RegisterAsync(new RegistrationRequest
+                User = new UserType
                 {
                     Name = usernameTextbox.Text,
                     Password = passwordBox.Password
-                });
+                }
+            }, null);
 
-                if (response.Success)
-                {
-                    Success(response.Message);
-                    resultMessage.Content += ", logging you in...";
-                    await Task.Delay(1000);
-                    Login(sender, e);
-                }
-                else
-                {
-                    Error(response.Message);
-                }
-            }
-            catch (Exception ex)
+            if (response.Success)
             {
-                Error("Server unavailable.");
-                return;
+                Success(response.Message);
+                resultMessage.Content += ", logging you in...";
+                await Task.Delay(1000);
+                Login(sender, e);
+            }
+            else
+            {
+                Error(response.Message);
             }
         }
-
-        void Error(string message)
+        catch (Exception ex)
         {
-            resultMessage.Foreground = Brushes.Red;
-            resultMessage.Content = message;
+            Error("Server unavailable.");
+            return;
         }
+    }
 
-        void Success(string message)
-        {
-            resultMessage.Foreground = Brushes.Green;
-            resultMessage.Content = message;
-        }
+    void Error(string message)
+    {
+        resultMessage.Foreground = Brushes.Red;
+        resultMessage.Content = message;
+    }
+
+    void Success(string message)
+    {
+        resultMessage.Foreground = Brushes.Green;
+        resultMessage.Content = message;
     }
 }
