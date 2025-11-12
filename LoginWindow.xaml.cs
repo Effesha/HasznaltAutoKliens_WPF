@@ -23,10 +23,12 @@ public partial class LoginWindow : Window
 
         loginButton.Click += new RoutedEventHandler(Login);
         registerButton.Click += new RoutedEventHandler(Register);
+        guestLoginButton.Click += new RoutedEventHandler(GuestLogin);
     }
 
     public async void Login(object sender, RoutedEventArgs e)
     {
+        // bypass login for quicker dev logins
         //resultMessage.Content += "Debug mode, logging in...";
         //await Task.Delay(1000);
         //MainWindow mwDebug = new("1", 1);
@@ -60,11 +62,32 @@ public partial class LoginWindow : Window
             {
                 Success(response.Message);
                 resultMessage.Content += " Redirecting...";
-                await Task.Delay(1500); // TODO AB consider removing
+                await Task.Delay(1500); // Note AB: for demo purposes
                 MainWindow mw = new(response.SessionId, response.CurrentUser);
                 Close();
                 mw.Show();
             }
+        }
+        catch (Exception ex)
+        {
+            Error("Server unavailable.");
+            return;
+        }
+    }
+
+    public async void GuestLogin(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            resultMessage.Content = "Trying to log you in...";
+            await Task.Delay(500);
+            Success("Guest login request successful.");
+            resultMessage.Content += " Redirecting...";
+            await Task.Delay(1500);
+            MainWindow mw = new(isGuest: true);
+            Close();
+            mw.Show();
+
         }
         catch (Exception ex)
         {

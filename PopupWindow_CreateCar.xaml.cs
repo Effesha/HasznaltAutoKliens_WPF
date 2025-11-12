@@ -1,8 +1,7 @@
 ﻿using HasznaltAuto.API;
-using HasznaltAuto.API.DTOs;
+using HasznaltAuto.API.REST.Mappers;
 using HasznaltAuto.Desktop.Helpers;
 using HasznaltAuto.Desktop.ViewModels;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;

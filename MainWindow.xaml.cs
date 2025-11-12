@@ -1,6 +1,7 @@
 ﻿using Grpc.Core;
 using HasznaltAuto.API;
 using HasznaltAuto.API.DTOs;
+using HasznaltAuto.API.REST.Mappers;
 using HasznaltAuto.Desktop.Helpers;
 using HasznaltAuto.Desktop.ViewModels;
 using System;
@@ -35,6 +36,7 @@ namespace HasznaltAutoKliens
 
         string _sessionId = string.Empty;
         int _currentUser = 0;
+        bool _isGuest = false;
 
         public MainWindow(string sessionId, int currentuser)
         {
@@ -54,8 +56,41 @@ namespace HasznaltAutoKliens
             AssignEventHandlers();
         }
 
+        public MainWindow(bool isGuest)
+        {
+            InitializeComponent();
+
+            _hasznaltAutoGrpcClient = App.GrpcService.HasznaltAutoGrpcClient;
+            _userGrpClient = App.GrpcService.UserGrpcClient;
+            _carGrpClient = App.GrpcService.CarGrpcClient;
+
+            _isGuest = isGuest;
+            HideButtons();
+            Title += "Logged in as a guest";
+            MessageHelper.Default(ref resultMessage);
+
+            Loaded += OnLoad;
+
+            AssignEventHandlers();
+        }
+
+        private void HideButtons()
+        {
+            createButton.Visibility = Visibility.Hidden;
+            updateButton.Visibility = Visibility.Hidden;
+            deleteButton.Visibility = Visibility.Hidden;
+            buyButton.Visibility = Visibility.Hidden;
+        }
+
         public async void Logout(object sender, RoutedEventArgs e)
         {
+            if (_isGuest)
+            {
+                LoginWindow lw = new();
+                Close();
+                lw.Show();
+            }
+
             if (_sessionId is null)
             {
                 MessageHelper.Error(ref resultMessage, "Unauthorized access.");
@@ -86,7 +121,7 @@ namespace HasznaltAutoKliens
 
         public void Create(object sender, RoutedEventArgs e)
         {
-            if (_sessionId is null)
+            if (_sessionId is null || _isGuest)
             {
                 MessageHelper.Error(ref resultMessage, "Unauthorized access.");
                 return;
@@ -100,7 +135,7 @@ namespace HasznaltAutoKliens
 
         public async void Update(object sender, RoutedEventArgs e)
         {
-            if (_sessionId is null)
+            if (_sessionId is null || _isGuest)
             {
                 MessageHelper.Error(ref resultMessage, "Unauthorized access.");
                 return;
@@ -126,7 +161,6 @@ namespace HasznaltAutoKliens
 
             var viewModel = new PopupVm()
             {
-                //CarDto = carResponse.MapToCarDto(_currentUser, licensePlate),
                 CarDto = selectedCar,
                 FuelTypes = FuelTypes.ToList(),
                 Makes = Makes.ToList(),
@@ -141,7 +175,7 @@ namespace HasznaltAutoKliens
 
         public async void Delete(object sender, RoutedEventArgs e)
         {
-            if (_sessionId is null)
+            if (_sessionId is null || _isGuest)
             {
                 MessageHelper.Error(ref resultMessage, "Unauthorized access.");
                 return;
@@ -181,7 +215,7 @@ namespace HasznaltAutoKliens
 
         public async void Buy(object sender, RoutedEventArgs e)
         {
-            if (_sessionId is null)
+            if (_sessionId is null || _isGuest)
             {
                 MessageHelper.Error(ref resultMessage, "Unauthorized access.");
                 return;
@@ -271,7 +305,7 @@ namespace HasznaltAutoKliens
             var usersResponse = usersCall.ResponseStream;
             while (await usersResponse.MoveNext())
             {
-                 Users.Add(usersResponse.Current);
+                Users.Add(usersResponse.Current);
             }
 
             foreach (var carType in CarList)
