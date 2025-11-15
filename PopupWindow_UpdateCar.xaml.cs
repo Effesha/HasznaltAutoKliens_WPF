@@ -34,6 +34,8 @@ namespace HasznaltAutoKliens
             ViewModel = viewModel;
             _sessionId = sessionId;
             _currentUser = currentUser;
+
+            DataContext = ViewModel;
         }
 
         public async void Update(object sender, RoutedEventArgs e)

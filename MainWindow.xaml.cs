@@ -154,6 +154,12 @@ namespace HasznaltAutoKliens
                 return;
             }
 
+            if (carResponse.CurrentOwner != _currentUser)
+            {
+                MessageHelper.Error(ref resultMessage, "Unauthorized: this car does not belong to you.");
+                return;
+            }
+
             string? licensePlate = VehicleRegistrationTypes
                 .ToList()
                 .FirstOrDefault(vr => vr.Id == carResponse.VehicleRegistrationId)
@@ -184,6 +190,12 @@ namespace HasznaltAutoKliens
             if (CarsGrid.SelectedItem is not CarDto selectedCar)
             {
                 MessageHelper.Error(ref resultMessage, "Selected item is not a car.");
+                return;
+            }
+
+            if (selectedCar.CurrentOwner != _currentUser)
+            {
+                MessageHelper.Error(ref resultMessage, "Unauthorized: this car does not belong to you.");
                 return;
             }
 
@@ -283,30 +295,36 @@ namespace HasznaltAutoKliens
 
         private async Task PopulateCarList()
         {
-            CarList.Clear();
+            var carList = new ObservableCollection<CarType>();
             using var listCarsCall = _hasznaltAutoGrpcClient.ListCars(new Empty());
             var listCarsResponse = listCarsCall.ResponseStream;
             while (await listCarsResponse.MoveNext())
             {
                 CarType car = listCarsResponse.Current;
-                CarList.Add(car);
+                carList.Add(car);
             }
 
-            VehicleRegistrationTypes.Clear();
+            CarList = carList;
+
+            var vehRegsList = new ObservableCollection<VehicleRegistrationType>();
             using var listVehRegsCall = _carGrpClient.ListVehicleRegistrations(new Empty());
             var listVehRegsResponse = listVehRegsCall.ResponseStream;
             while (await listVehRegsResponse.MoveNext())
             {
-                VehicleRegistrationTypes.Add(listVehRegsResponse.Current);
+                vehRegsList.Add(listVehRegsResponse.Current);
             }
 
-            Users.Clear();
+            VehicleRegistrationTypes = vehRegsList;
+
+            var usersList = new ObservableCollection<ListUsersResponse>();
             using var usersCall = _userGrpClient.ListUsers(new Empty());
             var usersResponse = usersCall.ResponseStream;
             while (await usersResponse.MoveNext())
             {
-                Users.Add(usersResponse.Current);
+                usersList.Add(usersResponse.Current);
             }
+
+            Users = usersList;
 
             foreach (var carType in CarList)
             {
