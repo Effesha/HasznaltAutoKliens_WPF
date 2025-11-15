@@ -334,26 +334,35 @@ namespace HasznaltAutoKliens
 
         private async Task PopulateDropdowns()
         {
+            var modelsList = new ObservableCollection<ModelType>();
             using var modelsCall = _hasznaltAutoGrpcClient.ListModels(new Empty());
             var modelsResponse = modelsCall.ResponseStream;
             while (await modelsResponse.MoveNext())
             {
-                Models.Add(modelsResponse.Current);
+                modelsList.Add(modelsResponse.Current);
             }
 
+            Models = modelsList;
+
+            var makesList = new ObservableCollection<MakeType>();
             using var makesCall = _hasznaltAutoGrpcClient.ListMakes(new Empty());
             var makesResponse = makesCall.ResponseStream;
             while (await makesResponse.MoveNext())
             {
-                Makes.Add(makesResponse.Current);
+                makesList.Add(makesResponse.Current);
             }
 
+            Makes = makesList;
+
+            var fuelTypesList = new ObservableCollection<FuelType>();
             using var fuelTypesCall = _hasznaltAutoGrpcClient.ListFuelTypes(new Empty());
             var fuelTypesResponse = fuelTypesCall.ResponseStream;
             while (await fuelTypesResponse.MoveNext())
             {
-                FuelTypes.Add(fuelTypesResponse.Current);
+                fuelTypesList.Add(fuelTypesResponse.Current);
             }
+
+            FuelTypes = fuelTypesList;
         }
 
         private void AssignEventHandlers()
