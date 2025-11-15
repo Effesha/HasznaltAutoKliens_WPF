@@ -326,6 +326,7 @@ namespace HasznaltAutoKliens
 
             Users = usersList;
 
+            CarDtos = new();
             foreach (var carType in CarList)
             {
                 CarDtos.Add(carType.MapToCarDto(Users.ToList(), FuelTypes.ToList(), Makes.ToList(), Models.ToList(), VehicleRegistrationTypes.ToList()));
